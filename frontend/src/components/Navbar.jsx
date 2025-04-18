@@ -1,9 +1,13 @@
 import { Link } from "react-router-dom";
 import { useAuthStore } from "../store/useAuthStore";
-import { LogOut, MessageSquare, Settings, User, HelpCircle } from "lucide-react";
+import { LogOut, MessageSquare, Settings, User, HelpCircle, Phone } from "lucide-react";
+import { useState } from "react";
+
 
 const Navbar = () => {
   const { logout, authUser } = useAuthStore();
+  const [showSupportCard, setShowSupportCard] = useState(false); // State to toggle the support card
+
 
   return (
     <header
@@ -46,15 +50,41 @@ const Navbar = () => {
                 </button>
 
                 {/* Support Button */}
-                <a
-                  href="https://ginesys.freshdesk.com/support/login"
-                  target="_blank"
-                  rel="noopener noreferrer"
-                  className="btn btn-sm gap-2"
-                >
-                  <HelpCircle className="size-5" />
-                  <span className="hidden sm:inline">Support</span>
-                </a>
+                <div className="relative">
+                  <button
+                    onClick={() => setShowSupportCard((prev) => !prev)} // Toggle the support card
+                    className="btn btn-sm gap-2"
+                  >
+                    <HelpCircle className="size-5" />
+                    <span className="hidden sm:inline">Support</span>
+                  </button>
+
+                  {showSupportCard && (
+                    <div
+                      className="absolute right-0 mt-2 w-64 bg-white shadow-lg rounded-lg p-4 z-50 border border-gray-200"
+                    >
+                      <div className="flex items-center gap-2 mb-2">
+                        <Phone className="w-5 h-5 text-primary" />
+                        <span className="font-medium">CSM: 1212 433 171</span>
+                      </div>
+                      <div className="flex items-center gap-2">
+                        <HelpCircle className="w-5 h-5 text-primary" />
+                        <span className="font-medium">Ginesys Support</span>
+                      </div>
+
+                      {/* Ginesys One Button */}
+                      <a
+                        href="https://ginesys.freshdesk.com/support/login"
+                        target="_blank"
+                        rel="noopener noreferrer"
+                        className="btn btn-primary w-full mt-3"
+                      >
+                        Go to Ginesys One
+                      </a>
+
+                    </div>
+                  )}
+                </div>
               </>
             )}
           </div>

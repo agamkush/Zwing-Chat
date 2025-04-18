@@ -1,11 +1,14 @@
 import { useRef, useState } from "react";
 import { useChatStore } from "../store/useChatStore";
-import { Image, Send, X } from "lucide-react";
+import { Image, Send, X, Smile } from "lucide-react";
 import toast from "react-hot-toast";
+import EmojiPicker from "emoji-picker-react"; // Import emoji picker
+
 
 const MessageInput = () => {
   const [text, setText] = useState("");
   const [imagePreview, setImagePreview] = useState(null);
+  const [showEmojiPicker, setShowEmojiPicker] = useState(false); // State to toggle emoji picker
   const fileInputRef = useRef(null);
   const { sendMessage } = useChatStore();
 
@@ -45,6 +48,10 @@ const MessageInput = () => {
     } catch (error) {
       console.error("Failed to send message:", error);
     }
+  };
+
+  const handleEmojiClick = (emojiObject) => {
+    setText((prevText) => prevText + emojiObject.emoji); // Append emoji to the text
   };
 
   return (
@@ -94,6 +101,14 @@ const MessageInput = () => {
           >
             <Image size={20} />
           </button>
+          {/* Emoji Picker Button */}
+          <button
+            type="button"
+            className="btn btn-circle text-zinc-400"
+            onClick={() => setShowEmojiPicker((prev) => !prev)} // Toggle emoji picker
+          >
+            <Smile size={20} />
+          </button>
         </div>
         <button
           type="submit"
@@ -103,6 +118,12 @@ const MessageInput = () => {
           <Send size={22} />
         </button>
       </form>
+      {/* Emoji Picker */}
+      {showEmojiPicker && (
+        <div className="absolute bottom-16 left-0 z-50">
+          <EmojiPicker onEmojiClick={handleEmojiClick} />
+        </div>
+      )}
     </div>
   );
 };
