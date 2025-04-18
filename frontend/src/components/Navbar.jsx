@@ -1,6 +1,6 @@
 import { Link } from "react-router-dom";
 import { useAuthStore } from "../store/useAuthStore";
-import { LogOut, MessageSquare, Settings, User } from "lucide-react";
+import { LogOut, MessageSquare, Settings, User, HelpCircle } from "lucide-react";
 
 const Navbar = () => {
   const { logout, authUser } = useAuthStore();
@@ -44,6 +44,17 @@ const Navbar = () => {
                   <LogOut className="size-5" />
                   <span className="hidden sm:inline">Logout</span>
                 </button>
+
+                {/* Support Button */}
+                <a
+                  href="https://ginesys.freshdesk.com/support/login"
+                  target="_blank"
+                  rel="noopener noreferrer"
+                  className="btn btn-sm gap-2"
+                >
+                  <HelpCircle className="size-5" />
+                  <span className="hidden sm:inline">Support</span>
+                </a>
               </>
             )}
           </div>

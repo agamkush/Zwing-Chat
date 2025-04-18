@@ -7,15 +7,90 @@ import { getReceiverSocketId, io } from "../lib/socket.js";
 export const getUsersForSidebar = async (req, res) => {
   try {
     const loggedInUserId = req.user._id;
-    const filteredUsers = await User.find({ _id: { $ne: loggedInUserId } }).select("-password");
+    // Convert string ID to ObjectId if needed
+    const objectId = loggedInUserId;
+    
+    // Get all users who have exchanged messages with the logged-in user
+    const usersWithMessages = await Message.aggregate([
+      // Match messages where the logged-in user is either sender or receiver
+      {
+        $match: {
+          $or: [
+            { senderId: objectId },
+            { receiverId: objectId }
+          ]
+        }
+      },
+      // Determine which ID in the message is the other user's ID
+      {
+        $addFields: {
+          otherUserId: {
+            $cond: {
+              if: { $eq: ["$senderId", objectId] },
+              then: "$receiverId",
+              else: "$senderId"
+            }
+          }
+        }
+      },
+      // Group by the other user's ID and get the most recent message date
+      {
+        $group: {
+          _id: "$otherUserId",
+          lastMessageAt: { $max: "$createdAt" }
+        }
+      },
+      // Sort by the most recent message
+      {
+        $sort: { lastMessageAt: -1 }
+      },
+      // Look up the user details
+      {
+        $lookup: {
+          from: "users",
+          localField: "_id",
+          foreignField: "_id",
+          as: "userDetails"
+        }
+      },
+      // Unwind the user details array
+      {
+        $unwind: "$userDetails"
+      },
+      // Project to format the output
+      {
+        $project: {
+          _id: "$userDetails._id",
+          email: "$userDetails.email",
+          fullName: "$userDetails.fullName",
+          profilePic: "$userDetails.profilePic",
+          createdAt: "$userDetails.createdAt",
+          updatedAt: "$userDetails.updatedAt",
+          __v: "$userDetails.__v"
+        }
+      }
+    ]);
+    
+    // Get users who haven't exchanged messages with the logged-in user
+    const usersWithoutMessages = await User.find({
+      _id: { 
+        $ne: objectId,
+        $nin: usersWithMessages.map(user => user._id) 
+      }
+    }).select("-password");
+    
+    // Combine and send the results
+    const allUsers = [...usersWithMessages, ...usersWithoutMessages];
+    
+    res.status(200).json(allUsers)
+    // const filteredUsers = await User.find({ _id: { $ne: loggedInUserId } }).select("-password");
 
-    res.status(200).json(filteredUsers);
+    // res.status(200).json(filteredUsers);
   } catch (error) {
     console.error("Error in getUsersForSidebar: ", error.message);
     res.status(500).json({ error: "Internal server error" });
   }
 };
-
 export const getMessages = async (req, res) => {
   try {
     const { id: userToChatId } = req.params;

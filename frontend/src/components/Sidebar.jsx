@@ -3,20 +3,26 @@ import { useChatStore } from "../store/useChatStore";
 import { useAuthStore } from "../store/useAuthStore";
 import SidebarSkeleton from "./skeletons/SidebarSkeleton";
 import { Users } from "lucide-react";
+import moment from "moment"; // Import moment.js for formatting timestamps
 
 const Sidebar = () => {
   const { getUsers, users, selectedUser, setSelectedUser, isUsersLoading } = useChatStore();
 
   const { onlineUsers } = useAuthStore();
   const [showOnlineOnly, setShowOnlineOnly] = useState(false);
+  const [searchQuery, setSearchQuery] = useState("");
 
   useEffect(() => {
     getUsers();
   }, [getUsers]);
 
-  const filteredUsers = showOnlineOnly
-    ? users.filter((user) => onlineUsers.includes(user._id))
-    : users;
+  const filteredUsers = users.filter((user) => {
+    const matchesSearch = user.fullName.toLowerCase().includes(searchQuery.toLowerCase());
+    const matchesOnlineStatus = showOnlineOnly
+      ? onlineUsers.includes(user._id)
+      : true;
+    return matchesSearch && matchesOnlineStatus;
+  });
 
   if (isUsersLoading) return <SidebarSkeleton />;
 
@@ -26,6 +32,16 @@ const Sidebar = () => {
         <div className="flex items-center gap-2">
           <Users className="size-6" />
           <span className="font-medium hidden lg:block">Contacts</span>
+        </div>
+        {/* Search Input Field */}
+        <div className="mt-3 hidden lg:flex items-center gap-2">
+          <input
+            type="text"
+            value={searchQuery}
+            onChange={(e) => setSearchQuery(e.target.value)} // Update the search query state
+            placeholder="Search by name..."
+            className="input input-sm w-full" // Style the input field
+          />
         </div>
         {/* TODO: Online filter toggle */}
         <div className="mt-3 hidden lg:flex items-center gap-2">
@@ -71,8 +87,19 @@ const Sidebar = () => {
             <div className="hidden lg:block text-left min-w-0">
               <div className="font-medium truncate">{user.fullName}</div>
               <div className="text-sm text-zinc-400">
-                {onlineUsers.includes(user._id) ? "Online" : "Offline"}
+                {/* {onlineUsers.includes(user._id) ? "Online" : "Offline"} */}
               </div>
+              {/* {Last message details} */}
+              {/* {user.lastMessage && (
+                <div className="flex justify-between items-center w-full">
+                  <div className="text-sm text-zinc-500 truncate">
+                    {user.lastMessage.text || "No message"}
+                  </div>
+                  <div className="text-xs text-zinc-400 wl-2 text-right">
+                    {moment(user.lastMessage.createdAt).format('h:mm A')}
+                  </div>
+                </div>
+              )} */}
             </div>
           </button>
         ))}
