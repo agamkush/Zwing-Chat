@@ -89,17 +89,9 @@ const Sidebar = () => {
               <div className="text-sm text-zinc-400">
                 {/* {onlineUsers.includes(user._id) ? "Online" : "Offline"} */}
               </div>
-              {/* {Last message details} */}
-              {/* {user.lastMessage && (
-                <div className="flex justify-between items-center w-full">
-                  <div className="text-sm text-zinc-500 truncate">
-                    {user.lastMessage.text || "No message"}
-                  </div>
-                  <div className="text-xs text-zinc-400 wl-2 text-right">
-                    {moment(user.lastMessage.createdAt).format('h:mm A')}
-                  </div>
-                </div>
-              )} */}
+              <div className="text-xs text-zinc-500">
+                {moment(user.lastSeen).fromNow()}
+              </div>
             </div>
           </button>
         ))}
