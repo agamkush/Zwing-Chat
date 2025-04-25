@@ -1,0 +1,24 @@
+namespace: chat-app
+replicaCount: 2
+
+# Common container configuration
+image:
+  repository: chatapp/chat-app
+  version: latest
+
+# Backend specific
+backend:
+  appName: backend
+  containerName: backend-container
+  port: 5001
+  mongodbUri: "mongodb+srv://agam:agam@chatapp-db.yngnntn.mongodb.net/?retryWrites=true&w=majority&appName=chatApp-db"
+  mongoPasswordSecret:
+    name: db-secret
+    key: password
+
+# Frontend specific
+frontend:
+  appName: frontend
+  containerName: frontend-container
+  port: 80
+
