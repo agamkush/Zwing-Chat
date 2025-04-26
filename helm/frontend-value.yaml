@@ -1,0 +1,18 @@
+app:
+  name: frontend
+
+replicaCount: 1
+
+image:
+  repository: 047719646358.dkr.ecr.ap-south-1.amazonaws.com/frontend
+  tag: frontend-image
+
+containerPort: 80
+
+imagePullSecrets: ecr-creds
+
+
+service:
+  name: frontend
+  port: 80
+  targetPort: 80

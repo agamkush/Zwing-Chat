@@ -1,9 +1,9 @@
 name: Deploy to Amazon ECS
 
 on:
-  # push:
-    # branches:
-    # - staging
+  push:
+    branches:
+    - staging
 
 env:
   AWS_REGION: ap-south-1
@@ -42,6 +42,9 @@ jobs:
 
     - name: Deploy with Helm
       run: |
-          helm upgrade --install chat-app ./helm \
+          helm upgrade --install chat-app ./helm --namespace chat-app \
             --set image.repository=${{ steps.ecr-login.outputs.registry }}/${{ env.ECR_REPOSITORY }} \
             --set image.tag=${{ env.IMAGE_TAG }} \
+            --values helm/frontend-values.yaml \
+            --create-namespace \
+            --namespace chat-app \

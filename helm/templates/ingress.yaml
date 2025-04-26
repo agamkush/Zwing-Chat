@@ -1,0 +1,27 @@
+apiVersion: networking.k8s.io/v1
+kind: Ingress
+metadata:
+  name: chat-app-ingress
+  annotations:
+    nginx.ingress.kubernetes.io/rewrite-target: /
+  namespace: default
+spec:
+  ingressClassName: nginx  
+  rules:
+    - host: nginx.fun
+      http:
+        paths:
+          - path: /              # Route to frontend
+            pathType: Prefix
+            backend:
+              service:
+                name: frontend
+                port:
+                  number: 80
+          - path: /api           # Route to backend
+            pathType: Prefix
+            backend:
+              service:
+                name: backend
+                port:
+                  number: 5001
