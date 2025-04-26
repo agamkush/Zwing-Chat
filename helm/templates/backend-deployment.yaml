@@ -30,24 +30,24 @@ spec:
             - name: CLOUDINARY_API
               valueFrom: 
                 secretKeyRef:
-                  name: {{ .Values.envSecrets.CLOUDINARY_API.secretName }}
-                  key: {{ .Values.envSecrets.CLOUDINARY_API.secretKey }}
+                  name: "{{ .Values.envSecrets.CLOUDINARY_API.secretName }}"
+                  key: "{{ .Values.envSecrets.CLOUDINARY_API.secretKey }}"
             - name: CLOUDINARY_SECRET
               valueFrom:
                 secretKeyRef:
-                  name: {{ .Values.envSecrets.CLOUDINARY_SECRET.secretName }}
-                  key: {{ .Values.envSecrets.CLOUDINARY_SECRET.secretKey }}
+                  name: "{{ .Values.envSecrets.CLOUDINARY_SECRET.secretName }}"
+                  key: "{{ .Values.envSecrets.CLOUDINARY_SECRET.secretKey }}"
             - name: MONGODB_URI
               value: "{{ .Values.env.MONGODB_URI }}"
             - name: MONGO_PASSWORD
               valueFrom:
                 secretKeyRef:
-                  name: {{ .Values.envSecrets.MONGO_PASSWORD.secretName }}
-                  key: {{ .Values.envSecrets.MONGO_PASSWORD.secretKey }}
+                  name: "{{ .Values.envSecrets.MONGO_PASSWORD.secretName }}"
+                  key: "{{ .Values.envSecrets.MONGO_PASSWORD.secretKey }}"
             - name: JWT_SECRET
               valueFrom: 
                 secretKeyRef:
-                  name: {{ .Values.envSecrets.JWT_SECRET.secretName }}
-                  key: {{ .Values.envSecrets.JWT_SECRET.secretKey }}
+                  name: "{{ .Values.envSecrets.JWT_SECRET.secretName }}"
+                  key: "{{ .Values.envSecrets.JWT_SECRET.secretKey }}"
       imagePullSecrets:
-        - name: {{ .Values.imagePullSecrets }}
+        - name: "{{ .Values.imagePullSecrets }}"
