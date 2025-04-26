@@ -22,7 +22,7 @@ spec:
               containerPort: {{ .Values.containerPort }}
           env:
             - name: PORT
-              value: "{{ .Values.env.PORT }}"
+              value: "{{ .Values.env.PORT | quote }}"
             - name: NODE_ENV
               value: "{{ .Values.env.NODE_ENV }}"
             - name: CLOUDINARY_NAME
