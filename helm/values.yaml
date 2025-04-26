@@ -37,7 +37,8 @@ service:
   targetPort: 5001
 
 
-
+ingress:
+  enabled: false
 
 
 # app:
