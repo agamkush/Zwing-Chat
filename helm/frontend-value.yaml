@@ -11,7 +11,6 @@ containerPort: 80
 
 imagePullSecrets: ecr-creds
 
-
 service:
   name: frontend
   port: 80
