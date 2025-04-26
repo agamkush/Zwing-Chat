@@ -3,7 +3,7 @@ name: Deploy to Amazon ECS
 on:
   push:
     branches:
-    - staging
+      - staging
 
 env:
   AWS_REGION: ap-south-1
