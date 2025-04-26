@@ -27,6 +27,7 @@ spec:
               value: "{{ .Values.env.NODE_ENV }}"
             - name: CLOUDINARY_NAME
               value: "{{ .Values.env.CLOUDINARY_NAME }}"
+          envFrom:
             - name: CLOUDINARY_API
               valueFrom: 
                 secretKeyRef:
