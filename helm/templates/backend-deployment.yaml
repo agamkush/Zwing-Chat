@@ -20,6 +20,8 @@ spec:
           ports:
             - name: api
               containerPort: {{ .Values.containerPort }}
+      imagePullSecrets:
+        - name: "{{ .Values.imagePullSecrets }}"
           env:
             - name: PORT
               value: "{{ .Values.env.PORT | quote }}"
@@ -27,7 +29,6 @@ spec:
               value: "{{ .Values.env.NODE_ENV }}"
             - name: CLOUDINARY_NAME
               value: "{{ .Values.env.CLOUDINARY_NAME }}"
-          envFrom:
             - name: CLOUDINARY_API
               valueFrom: 
                 secretKeyRef:
@@ -50,5 +51,3 @@ spec:
                 secretKeyRef:
                   name: "{{ .Values.envSecrets.JWT_SECRET.secretName }}"
                   key: "{{ .Values.envSecrets.JWT_SECRET.secretKey }}"
-      imagePullSecrets:
-        - name: "{{ .Values.imagePullSecrets }}"
