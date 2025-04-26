@@ -12,7 +12,7 @@ containerPort: 5001
 imagePullSecrets: ecr-creds
 
 env:
-  PORT: "5001"
+  PORT: 5001
   NODE_ENV: development
   CLOUDINARY_NAME: dzvur6bca
   MONGODB_URI: "mongodb+srv://agam:agam@chatapp-db.yngnntn.mongodb.net/?retryWrites=true&w=majority&appName=chatApp-db"
