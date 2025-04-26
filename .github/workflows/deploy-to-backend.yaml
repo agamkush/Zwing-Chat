@@ -45,3 +45,5 @@ jobs:
           helm upgrade --install chat-app ./helm \
             --set image.repository=${{ steps.ecr-login.outputs.registry }}/${{ env.ECR_REPOSITORY }} \
             --set image.tag=${{ env.IMAGE_TAG }} \
+            --create-namespace \
+            --namespace chat-app \
