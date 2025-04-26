@@ -1,27 +1,25 @@
+{{- if .Values.ingress.enabled }}
 apiVersion: networking.k8s.io/v1
 kind: Ingress
 metadata:
-  name: chat-app-ingress
+  name: {{ include "chatApp.fullname" . }}-ingress
   annotations:
-    nginx.ingress.kubernetes.io/rewrite-target: /
-  namespace: default
+    {{- toYaml .Values.ingress.annotations | nindent 4 }}
 spec:
-  ingressClassName: nginx  
+  ingressClassName: {{ .Values.ingress.className }}
   rules:
-    - host: nginx.fun
+    {{- range .Values.ingress.hosts }}
+    - host: {{ .host }}
       http:
         paths:
-          - path: /              # Route to frontend
-            pathType: Prefix
+          {{- range .paths }}
+          - path: {{ .path }}
+            pathType: {{ .pathType }}
             backend:
               service:
-                name: frontend
+                name: {{ $.Values.service.name }}
                 port:
-                  number: 80
-          - path: /api           # Route to backend
-            pathType: Prefix
-            backend:
-              service:
-                name: backend
-                port:
-                  number: 5001
+                  number: {{ $.Values.service.port }}
+          {{- end }}
+    {{- end }}
+{{- end }}
