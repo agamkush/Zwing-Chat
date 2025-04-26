@@ -1,0 +1,53 @@
+apiVersion: apps/v1
+kind: Deployment
+metadata:
+  name: backend
+  labels:
+    app: backend
+spec:
+  replicas: 1
+  selector:
+    matchLabels:
+      app: backend
+  template:
+    metadata:
+      labels:
+        app: backend
+    spec:
+      containers:
+        - name: backend
+          image: 047719646358.dkr.ecr.ap-south-1.amazonaws.com/backendrepo:8ce0fe67e07b1b7194cd0ed5f7d5dc2b93b56a59
+          ports:
+            - name: api
+              containerPort: 5001
+          env:
+            - name: PORT
+              value: "5001"
+            - name: NODE_ENV
+              value: development
+            - name: CLOUDINARY_NAME
+              value: dzvur6bca
+            - name: CLOUDINARY_API
+              valueFrom: 
+                secretKeyRef:
+                  name: image-api
+                  key: CLOUDINARY_API
+            - name: CLOUDINARY_SECRET
+              valueFrom:
+                secretKeyRef:
+                  name: image-api-secret
+                  key: CLOUDINARY_SECRET
+            - name: MONGODB_URI
+              value: mongodb+srv://agam:agam@chatapp-db.yngnntn.mongodb.net/?retryWrites=true&w=majority&appName=chatApp-db
+            - name: MONGO_PASSWORD
+              valueFrom:
+                secretKeyRef:
+                  name: mongo-pass
+                  key: MONGO_PASSWORD
+            - name: JWT_SECRET
+              valueFrom: 
+                secretKeyRef:
+                  name: jwt-secret
+                  key: JWT_SECRET
+      imagePullSecrets:
+        - name: ecr-creds

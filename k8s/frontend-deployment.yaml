@@ -1,0 +1,31 @@
+apiVersion: apps/v1
+kind: Deployment
+metadata:
+  creationTimestamp: null
+  labels:
+    app: frontend
+  name: frontend
+spec:
+  replicas: 1
+  selector:
+    matchLabels:
+      app: frontend
+  strategy: {}
+  template:
+    metadata:
+      creationTimestamp: null
+      labels:
+        app: frontend
+    spec:
+      containers:
+        - image: 047719646358.dkr.ecr.ap-south-1.amazonaws.com/frontendrepo:8ce0fe67e07b1b7194cd0ed5f7d5dc2b93b56a59
+          name: frontend
+          ports:
+            - name: web
+              containerPort: 80
+          env:
+            - name: VITE_API_URL
+              value: "backend-service:5001"
+      imagePullSecrets:
+        - name: ecr-creds
+
