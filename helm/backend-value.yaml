@@ -38,4 +38,12 @@ service:
   type: ClusterIP
 
 ingress:
-  enabled: false
+  enabled: true
+  className: nginx
+  annotations:
+    nginx.ingress.kubernetes.io/rewrite-target: /
+  hosts:
+    - host: nginx.fun
+      paths:  
+        - path: /api
+          pathType: Prefix

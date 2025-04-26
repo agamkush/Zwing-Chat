@@ -18,4 +18,13 @@ service:
   type: ClusterIP
 
 ingress:
-  enabled: false
+  enabled: true
+  name: chat-app-ingress
+  className: nginx
+  annotations:
+    nginx.ingress.kubernetes.io/rewrite-target: /
+  hosts:
+    - host: nginx.fun
+      paths:
+       - path: /
+         pathType: Prefix
