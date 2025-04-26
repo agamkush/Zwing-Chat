@@ -17,3 +17,5 @@ service:
   targetPort: 80
   type: ClusterIP
 
+ingress:
+  enabled: false

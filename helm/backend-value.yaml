@@ -37,5 +37,5 @@ service:
   targetPort: 5001
   type: ClusterIP
 
-
-
+ingress:
+  enabled: false
