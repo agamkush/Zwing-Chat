@@ -1,24 +1,59 @@
-namespace: chat-app
-replicaCount: 2
+app:
+  name: backend
 
-# Common container configuration
+replicaCount: 1
+
 image:
-  repository: chatapp/chat-app
-  version: latest
+  repository: 047719646358.dkr.ecr.ap-south-1.amazonaws.com/backend
+  tag: backend-image
 
-# Backend specific
-backend:
-  appName: backend
-  containerName: backend-container
+containerPort: 5001
+
+imagePullSecrets: ecr-creds
+
+env:
+  PORT: "5001"
+  NODE_ENV: development
+  CLOUDINARY_NAME: dzvur6bca
+  MONGODB_URI: "mongodb+srv://agam:agam@chatapp-db.yngnntn.mongodb.net/?retryWrites=true&w=majority&appName=chatApp-db"
+
+envSecrets:
+  CLOUDINARY_API:
+    secretName: image-api
+    secretKey: CLOUDINARY_API
+  CLOUDINARY_SECRET:
+    secretName: image-api-secret
+    secretKey: CLOUDINARY_SECRET
+  MONGO_PASSWORD:
+    secretName: mongo-pass
+    secretKey: MONGO_PASSWORD
+  JWT_SECRET:
+    secretName: jwt-secret
+    secretKey: JWT_SECRET
+
+service:
+  name: backend
   port: 5001
-  mongodbUri: "mongodb+srv://agam:agam@chatapp-db.yngnntn.mongodb.net/?retryWrites=true&w=majority&appName=chatApp-db"
-  mongoPasswordSecret:
-    name: db-secret
-    key: password
+  targetPort: 5001
 
-# Frontend specific
-frontend:
-  appName: frontend
-  containerName: frontend-container
-  port: 80
 
+---
+
+# app:
+#   name: frontend
+
+# replicaCount: 1
+
+# image:
+#   repository: 047719646358.dkr.ecr.ap-south-1.amazonaws.com/frontend
+#   tag: frontend-image
+
+# containerPort: 80
+
+# imagePullSecrets: ecr-creds
+
+
+# service:
+#   name: frontend
+#   port: 80
+#   targetPort: 80

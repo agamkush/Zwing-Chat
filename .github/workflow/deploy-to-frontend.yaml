@@ -7,7 +7,7 @@ on:
 
 env:
   AWS_REGION: ap-south-1
-  ECR_REPOSITORY: chat-app/chat-app
+  ECR_REPOSITORY: frontend
   IMAGE_TAG: ${{ github.sha }}
 
 
@@ -45,5 +45,3 @@ jobs:
           helm upgrade --install chat-app /helm \
             --set image.repository=${{ steps.ecr-login.outputs.registry }}/${{ env.ECR_REPOSITORY }} \
             --set image.tag=${{ env.IMAGE_TAG }} \
-            --namespace chat-app \
-            --create-namespace
