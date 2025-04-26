@@ -7,7 +7,7 @@ on:
 
 env:
   AWS_REGION: ap-south-1
-  ECR_REPOSITORY: frontend
+  ECR_REPOSITORY: frontendrepo
   IMAGE_TAG: ${{ github.sha }}
 
 
@@ -36,15 +36,3 @@ jobs:
         docker tag ${{ env.ECR_REPOSITORY }}:latest ${{ steps.ecr-login.outputs.registry }}/${{ env.ECR_REPOSITORY }}:${{ env.IMAGE_TAG }}
         docker push ${{ steps.ecr-login.outputs.registry }}/${{ env.ECR_REPOSITORY }}:${{ env.IMAGE_TAG }}
     
-    - name: Update kubeconfig for Amazon EKS
-      run: |
-          aws eks update-kubeconfig --name example --region ${{ env.AWS_REGION }}
-
-    - name: Deploy with Helm
-      run: |
-          helm upgrade --install chat-app ./helm --namespace chat-app \
-            --set image.repository=${{ steps.ecr-login.outputs.registry }}/${{ env.ECR_REPOSITORY }} \
-            --set image.tag=${{ env.IMAGE_TAG }} \
-            --values helm/frontend-value.yaml \
-            --create-namespace \
-            --namespace chat-app \
