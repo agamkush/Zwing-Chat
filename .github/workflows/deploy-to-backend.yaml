@@ -38,7 +38,7 @@ jobs:
 
       - name: Update kubeconfig for Amazon EKS
         run: |
-          aws eks update-kubeconfig --name my-cluster --region ${{ env.AWS_REGION }}
+          aws eks update-kubeconfig --name example --region ${{ env.AWS_REGION }}
 
       - name: Deploy with Helm
         run: |
