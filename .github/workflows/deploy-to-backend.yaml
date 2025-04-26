@@ -42,7 +42,7 @@ jobs:
 
       - name: Deploy with Helm
         run: |
-          helm upgrade --install chat-app ./helm \
+          helm upgrade --install chat-app ./helm --namespace chat-app \
             --set image.repository=${{ steps.ecr-login.outputs.registry }}/${{ env.ECR_REPOSITORY }} \
             --set image.tag=${{ env.IMAGE_TAG }} \
             --create-namespace \
