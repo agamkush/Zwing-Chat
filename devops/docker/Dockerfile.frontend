@@ -3,6 +3,7 @@ WORKDIR /app
 COPY frontend/package*.json ./
 RUN npm install
 COPY frontend/ .
+ENV VUE_APP_API_URL=http://backend:8001
 RUN npm run build
 FROM nginx:alpine
 COPY devops/docker/nginx.conf /etc/nginx/conf.d/nginx.conf
