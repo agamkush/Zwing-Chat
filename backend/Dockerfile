@@ -2,7 +2,6 @@ FROM node:18-alpine AS builder
 WORKDIR /app
 COPY package*.json ./
 RUN npm ci 
-RUN ls -l /app/node_modules
 COPY . .
 
 FROM node:18-alpine
