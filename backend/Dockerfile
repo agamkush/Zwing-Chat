@@ -14,6 +14,6 @@ COPY --from=builder /app ./
 ENV NODE_ENV=production
 EXPOSE 5001
 USER appuser
-CMD ["npm", "run", "dev"]
+CMD ["npm", "start"]
 # docker build -t backend:latest -f devops/docker/Dockerfile.backend .
 # docker run -d -p 5001:5001 backend:latest
