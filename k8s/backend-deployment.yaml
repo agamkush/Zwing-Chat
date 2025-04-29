@@ -18,13 +18,12 @@ spec:
         - name: backend
           image: 047719646358.dkr.ecr.ap-south-1.amazonaws.com/backendrepo:8ce0fe67e07b1b7194cd0ed5f7d5dc2b93b56a59
           ports:
-            - name: api
-              containerPort: 5001
+          - containerPort: 5001
           env:
             - name: PORT
               value: "5001"
             - name: NODE_ENV
-              value: development
+              value: "production"
             - name: CLOUDINARY_NAME
               value: dzvur6bca
             - name: CLOUDINARY_API
