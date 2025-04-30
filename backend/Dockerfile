@@ -8,12 +8,10 @@ WORKDIR /app
 COPY package*.json ./
 
 # Install dependencies
-RUN npm install
+RUN npm install --omit=dev
 
 # Copy the rest of the application code to the working directory
 COPY . .
-
-WORKDIR /app/backend
 
 # Expose the port your application runs on (e.g., 3000)
 EXPOSE 5001
