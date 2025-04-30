@@ -13,6 +13,8 @@ RUN npm install
 # Copy the rest of the application code to the working directory
 COPY . .
 
+WORKDIR /app/backend
+
 # Expose the port your application runs on (e.g., 3000)
 EXPOSE 5001
 
