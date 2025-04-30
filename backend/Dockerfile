@@ -1,36 +1,20 @@
-FROM node:18-alpine AS builder
-
-# Set working directory
-WORKDIR /app
-
-# Install dependencies
-COPY package.json package-lock.json ./
-RUN npm ci --only=production
-
-# Copy source code
-COPY . .
-
-# Stage 2: Production
+# Use the official Node.js image as the base image
 FROM node:18-alpine
 
-# Set working directory
+# Set the working directory inside the container
 WORKDIR /app
 
-# Create a non-root user
-RUN addgroup -S appgroup && adduser -S appuser -G appgroup
+# Copy package.json and package-lock.json to the working directory
+COPY package*.json ./
 
-# Copy dependencies from builder
-COPY --from=builder /app/node_modules ./node_modules
-COPY --from=builder /app ./
+# Install dependencies
+RUN npm install
 
-# Set environment variables
-ENV NODE_ENV=production
+# Copy the rest of the application code to the working directory
+COPY . .
 
-# Expose port
+# Expose the port your application runs on (e.g., 3000)
 EXPOSE 5001
 
-# Switch to non-root user
-USER appuser
-
-# Start the server
-CMD ["node", "start"]
+# Define the command to run the application
+CMD ["npm", "start"]
