@@ -1,16 +1,36 @@
-FROM node:18-alpine AS builder
+ROM node:18-alpine AS builder
+
+# Set working directory
 WORKDIR /app
 
-COPY package*.json ./
-RUN npm install --production
+# Install dependencies
+COPY package.json package-lock.json ./
+RUN npm ci --only=production
+
+# Copy source code
 COPY . .
 
+# Stage 2: Production
 FROM node:18-alpine
+
+# Set working directory
 WORKDIR /app
 
-COPY --from=builder /app /app
+# Create a non-root user
+RUN addgroup -S appgroup && adduser -S appuser -G appgroup
 
+# Copy dependencies from builder
+COPY --from=builder /app/node_modules ./node_modules
+COPY --from=builder /app ./
+
+# Set environment variables
 ENV NODE_ENV=production
+
+# Expose port
 EXPOSE 5001
 
-CMD ["npm", "start"]
+# Switch to non-root user
+USER appuser
+
+# Start the server
+CMD ["node", "start"]
