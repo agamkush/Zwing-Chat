@@ -16,13 +16,15 @@ const Sidebar = () => {
     getUsers();
   }, [getUsers]);
 
-  const filteredUsers = users.filter((user) => {
-    const matchesSearch = user.fullName.toLowerCase().includes(searchQuery.toLowerCase());
-    const matchesOnlineStatus = showOnlineOnly
-      ? onlineUsers.includes(user._id)
-      : true;
-    return matchesSearch && matchesOnlineStatus;
-  });
+  const filteredUsers = Array.isArray(users) && users.length > 0
+  ? users.filter((user) => {
+      const matchesSearch = user.fullName.toLowerCase().includes(searchQuery.toLowerCase());
+      const matchesOnlineStatus = showOnlineOnly
+        ? onlineUsers.includes(user._id)
+        : true;
+      return matchesSearch && matchesOnlineStatus;
+    })
+  : [];
 
   if (isUsersLoading) return <SidebarSkeleton />;
 
