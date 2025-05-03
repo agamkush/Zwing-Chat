@@ -14,9 +14,19 @@ export const useChatStore = create((set, get) => ({
     set({ isUsersLoading: true });
     try {
       const res = await axiosInstance.get("/messages/users");
-      set({ users: res.data });
+
+      // Log the API response structure (you can remove this in production)
+      console.log("Fetched users response:", res.data);
+
+      // Safely extract users from response
+      const fetchedUsers = Array.isArray(res.data.users)
+        ? res.data.users
+        : res.data; // fallback if API returns array directly
+
+      set({ users: fetchedUsers });
     } catch (error) {
-      toast.error(error.response.data.message);
+      toast.error(error?.response?.data?.message || "Failed to load users");
+      set({ users: [] });
     } finally {
       set({ isUsersLoading: false });
     }
@@ -26,20 +36,24 @@ export const useChatStore = create((set, get) => ({
     set({ isMessagesLoading: true });
     try {
       const res = await axiosInstance.get(`/messages/${userId}`);
-      set({ messages: res.data });
+      set({ messages: Array.isArray(res.data) ? res.data : [] });
     } catch (error) {
-      toast.error(error.response.data.message);
+      toast.error(error?.response?.data?.message || "Failed to load messages");
+      set({ messages: [] });
     } finally {
       set({ isMessagesLoading: false });
     }
   },
+
   sendMessage: async (messageData) => {
     const { selectedUser, messages } = get();
+    if (!selectedUser) return;
+
     try {
       const res = await axiosInstance.post(`/messages/send/${selectedUser._id}`, messageData);
       set({ messages: [...messages, res.data] });
     } catch (error) {
-      toast.error(error.response.data.message);
+      toast.error(error?.response?.data?.message || "Failed to send message");
     }
   },
 
@@ -50,12 +64,10 @@ export const useChatStore = create((set, get) => ({
     const socket = useAuthStore.getState().socket;
 
     socket.on("newMessage", (newMessage) => {
-      const isMessageSentFromSelectedUser = newMessage.senderId === selectedUser._id;
-      if (!isMessageSentFromSelectedUser) return;
+      const isMessageFromSelectedUser = newMessage.senderId === selectedUser._id;
+      if (!isMessageFromSelectedUser) return;
 
-      set({
-        messages: [...get().messages, newMessage],
-      });
+      set({ messages: [...get().messages, newMessage] });
     });
   },
 
