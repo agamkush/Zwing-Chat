@@ -17,4 +17,4 @@ COPY . .
 EXPOSE 5001
 
 # Set the default command to run the application
-CMD ["npm", "run", "dev"]
+CMD ["npm", "run", "start"]
