@@ -1,5 +1,5 @@
-# Stage 1: Build Stage
-FROM node:18 AS builder
+# Stage 1: Install Dependencies
+FROM node:18 AS dependencies
 
 # Set the working directory
 WORKDIR /app
@@ -13,18 +13,14 @@ RUN npm install
 # Copy the rest of the application code
 COPY . .
 
-# Build the application (if applicable, e.g., TypeScript or bundling)
-RUN npm run build
-
 # Stage 2: Production Stage
 FROM node:18-alpine
 
 # Set the working directory
 WORKDIR /app
 
-# Copy only the necessary files from the build stage
-COPY --from=builder /app/dist ./dist
-COPY --from=builder /app/package*.json ./
+# Copy only the necessary files from the dependencies stage
+COPY --from=dependencies /app /app
 
 # Install only production dependencies
 RUN npm install --production
@@ -33,4 +29,4 @@ RUN npm install --production
 EXPOSE 5001
 
 # Set the default command to run the application
-CMD ["node", "dist/index.js"]
+CMD ["node", "src/index.js"]
