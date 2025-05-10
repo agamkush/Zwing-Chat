@@ -15,13 +15,13 @@ COPY . .
 
 # Build the application
 RUN npm run build
-RUN ls -l /app
+RUN ls -l /app/frontend
 
 # Stage 2: Serve Stage
 FROM nginx:alpine
 
 # Copy the built files from the builder stage
-COPY --from=builder /app/dist /usr/share/nginx/html
+COPY --from=builder /app/frontend/dist /usr/share/nginx/html
 
 # Expose the default Nginx port
 EXPOSE 80
