@@ -15,6 +15,7 @@ COPY . .
 
 # Build the application
 RUN npm run build
+RUN ls -l /app
 
 # Stage 2: Serve Stage
 FROM nginx:alpine
