@@ -17,4 +17,4 @@ COPY . .
 EXPOSE 5001
 
 # Set the default command to run the application
-CMD ["node", "index.js"]
+CMD ["node", "src/index.js"]
