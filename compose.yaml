@@ -1,0 +1,37 @@
+version: '3.8'
+
+services:
+  backend:
+    build:
+      context: .
+      dockerfile: backend/Dockerfile
+    container_name: node-backend
+    ports:
+      - "5001:5001"
+    volumes:
+      - ./backend:/app/backend
+      - /app/backend/node_modules
+    environment:
+      - NODE_ENV=development
+      - PORT=5001
+      - MONGODB_URI=mongodb+srv://agam:agam@chatapp-db.yngnntn.mongodb.net/?retryWrites=true&w=majority&appName=chatApp-db
+      - JWT_SECRET="eyJhbGciOiJIUzI1NiIsInR5cCI6IkpXVCJ9.eyJpZCI6IjEyMzQ1NiIsInVzZXJuYW1lIjoidGVzdHVzZXIiLCJpYXQiOjE3NDM0MjAyNzYsImV4cCI6MTc0MzQyMzg3Nn0.R0BcF01xEWNPY2tBaN1aSvBz-0scy0DJBKP3UnpwMsY"
+    networks:
+      - app-network
+
+  frontend:
+    build:
+      context: .
+      dockerfile: frontend/Dockerfile
+    container_name: react-frontend
+    ports:
+      - "3000:80"
+    depends_on:
+      - backend
+    networks:
+      - app-network
+
+networks:
+  app-network:
+    driver: bridge
+
