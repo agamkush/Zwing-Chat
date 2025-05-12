@@ -13,6 +13,7 @@ RUN npm install
 # Copy the rest of the application code
 COPY . .
 
+ENV ENV VITE_BACKEND_URL=https://nginx.fun/api
 # Build the application
 RUN npm run build
 RUN ls -l /app/frontend
