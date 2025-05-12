@@ -1,0 +1,32 @@
+apiVersion: apps/v1
+kind: Deployment
+metadata:
+  creationTimestamp: null
+  labels:
+    app: frontend
+  name: frontend
+spec:
+  replicas: 1
+  selector:
+    matchLabels:
+      app: frontend
+  strategy: {}
+  template:
+    metadata:
+      creationTimestamp: null
+      labels:
+        app: frontend
+    spec:
+      containers:
+        - image: 047719646358.dkr.ecr.ap-south-1.amazonaws.com/frontendrepo:54f5dff0db2dc235df8160374bfd465765b5623d
+          name: frontend
+          ports:
+            - name: web
+              containerPort: 80
+          env:
+            - name: NODE_ENV
+              value: "production"
+            - name: VITE_BACKEND_URL
+              value: "https://nginx.fun/api"
+      imagePullSecrets:
+      - name: ecr-creds
